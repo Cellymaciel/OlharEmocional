@@ -8,13 +8,13 @@ import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 type Emotion = 'happy' | 'sad' | 'angry' | 'neutral' | 'surprise' | 'fear' | 'disgust';
 
 const emotionVideos: Record<Emotion, any> = {
-  happy: require('./assets/videos/Alegria.mp4'),
-  sad: require('./assets/videos/Medo.mp4'),
+  happy: require('./assets/videos/Alegria_audio.mp4'),
+  sad: require('./assets/videos/Medo_audio.mp4'),
   neutral: require('./assets/videos/Neutro.mp4'),
-  surprise: require('./assets/videos/Surpresa.mp4'),
-  angry: require('./assets/videos/Raiva.mp4'),
-  fear: require('./assets/videos/Medo.mp4'),
-  disgust: require('./assets/videos/Raiva.mp4')
+  surprise: require('./assets/videos/Surpresa_audio.mp4'),
+  angry: require('./assets/videos/Raiva_audio.mp4'),
+  fear: require('./assets/videos/Medo_audio.mp4'),
+  disgust: require('./assets/videos/Raiva_audio.mp4')
 };
 
 export default function App() {
@@ -26,11 +26,10 @@ export default function App() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
 
-  // Function to capture and process image
   const captureAndProcessImage = async () => {
     if (cameraRef.current && !isProcessing) {
       console.log('Starting image capture...');
-      setIsProcessing(true); // Mark as processing to avoid capturing again during the process
+      setIsProcessing(true); 
       try {
         const options = { quality: 0.2, base64: true, skipProcessing: true };
         const data = await cameraRef.current.takePictureAsync(options);
@@ -40,7 +39,7 @@ export default function App() {
 
           const resizedImage = await manipulateAsync(
             data.uri,
-            [{ rotate: 270 }], // Adjust rotation as needed
+            [{ rotate: 270 }], 
             { base64: true, format: SaveFormat.JPEG }
           );
 
@@ -62,8 +61,7 @@ export default function App() {
       } finally {
         console.log('Waiting 5 seconds before the next capture...');
 
-      setIsProcessing(false)  // Wait for a few seconds before capturing the next image
-      // Adjust delay as needed
+      setIsProcessing(false)  
       }
     }
   };
@@ -71,16 +69,15 @@ export default function App() {
     if (permission?.granted) {
       console.log('Camera permission granted.');
 
-      captureAndProcessImage(); // Capture immediately after permissions are granted
+      captureAndProcessImage(); 
 
-      // Set an interval to capture and process images repeatedly
       intervalRef.current = setInterval(() => {
         if (!isProcessing) {
           console.log('Capturing image at interval...');
 
           captureAndProcessImage();
         }
-      }, 18000); // Capture every 5 seconds
+      }, 12000); 
 
       return () => {
         if (intervalRef.current) {
